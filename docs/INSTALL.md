@@ -7,7 +7,7 @@
 1. **Open Chrome** and navigate to `chrome://extensions/`
 2. **Enable Developer Mode** by toggling the switch in the top right corner
 3. **Click "Load unpacked"** button
-4. **Select the extension folder** (the folder containing `manifest.json`)
+4. **Select the `extension/` folder** (the folder containing `manifest.json`)
 5. The extension should now appear in your extensions list and toolbar
 
 ### 2. Grant Permissions

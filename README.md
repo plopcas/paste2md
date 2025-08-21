@@ -32,10 +32,10 @@ For users who prefer a browser extension:
 1. Download or clone this repository
 2. Open Chrome and go to `chrome://extensions/`
 3. Enable "Developer mode" in the top right
-4. Click "Load unpacked" and select the extension folder
+4. Click "Load unpacked" and select the `extension/` folder
 5. The extension icon will appear in your toolbar
 
-📖 **Detailed installation guide**: See [INSTALL.md](INSTALL.md) for complete setup instructions and troubleshooting.
+📖 **Detailed installation guide**: See [docs/INSTALL.md](docs/INSTALL.md) for complete setup instructions and troubleshooting.
 
 #### From Chrome Web Store
 *Coming soon...*
@@ -86,7 +86,7 @@ This extension is based on the excellent [clipboard2markdown](https://github.com
 ## Deployment
 
 ### 🌐 **Deploy Web App to GitHub Pages**
-See [DEPLOY.md](DEPLOY.md) for complete deployment instructions.
+See [docs/DEPLOY.md](docs/DEPLOY.md) for complete deployment instructions.
 
 Quick steps:
 1. Push this repository to GitHub
@@ -96,23 +96,29 @@ Quick steps:
 ### Project Structure
 ```
 paste2md/
-├── index.html            # 🌐 Web app main page
-├── web-app.js           # 🌐 Web app logic
-├── to-markdown.js       # 📚 Shared conversion library
-├── _config.yml          # 🌐 GitHub Pages config
-├── DEPLOY.md            # 🌐 Deployment guide
-├── manifest.json        # 🔧 Extension manifest
-├── popup.html           # 🔧 Extension popup UI
-├── popup.js             # 🔧 Extension logic
-├── popup.css            # 🔧 Extension styling
-├── background.js        # 🔧 Extension service worker
-├── content.js           # 🔧 Extension content script
-├── test.html            # 🧪 Test page with sample content
-├── INSTALL.md           # 🔧 Extension installation guide
-└── README.md            # 📖 This file
+├── index.html              # 🌐 Web app main page
+├── web-app.js             # 🌐 Web app logic
+├── _config.yml            # 🌐 GitHub Pages config
+├── README.md              # 📖 This file
+├── extension/             # 🔧 Chrome Extension files
+│   ├── manifest.json      # 🔧 Extension manifest
+│   ├── popup.html         # 🔧 Extension popup UI
+│   ├── popup.js           # 🔧 Extension logic
+│   ├── popup.css          # 🔧 Extension styling
+│   ├── background.js      # 🔧 Extension service worker
+│   └── content.js         # 🔧 Extension content script
+├── lib/                   # 📚 Shared libraries
+│   └── to-markdown.js     # 📚 Conversion library
+├── docs/                  # 📖 Documentation
+│   ├── DEPLOY.md          # 🌐 Deployment guide
+│   └── INSTALL.md         # 🔧 Extension installation guide
+└── tests/                 # 🧪 Test files
+    ├── test.html          # 🧪 Test page with sample content
+    ├── test-shortcuts.html # 🧪 Keyboard shortcuts test
+    └── clipboard-test.html # 🧪 Clipboard functionality test
 ```
 
-🌐 = Web app files | 🔧 = Extension files | 📚 = Shared | 🧪 = Testing
+🌐 = Web app files | 🔧 = Extension files | 📚 = Shared | 📖 = Documentation | 🧪 = Testing
 
 ### Building
 No build process required - this is a pure JavaScript extension.

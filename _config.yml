@@ -1,0 +1,41 @@
+# GitHub Pages configuration for Paste to Markdown
+title: "Paste to Markdown"
+description: "Convert rich text from your clipboard to Markdown format instantly"
+url: "https://plopcas.github.io"
+baseurl: "/paste2md"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Exclude files from the site
+exclude:
+  - extension/
+  - tests/
+  - docs/
+  - README.md
+  - .gitignore
+  - .git/
+
+# Include files that would normally be excluded
+include:
+  - lib/
+
+# Plugin settings
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO settings
+author: "Pedro Lopez"
+twitter:
+  username: plopcas
+  card: summary
+
+# Social links
+github_username: plopcas
+
+# Google Analytics (optional)
+# google_analytics: UA-XXXXXXXX-X
