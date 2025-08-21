@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Paste to Markdown",
+  "version": "1.0.0",
+  "description": "Convert rich-text from your clipboard to Markdown with a single click",
+  "permissions": [
+    "clipboardRead",
+    "clipboardWrite"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Paste to Markdown"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

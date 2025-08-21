@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paste to Markdown - Convert Rich Text to Markdown</title>
+    <meta name="description" content="Convert rich text from your clipboard to Markdown format instantly. Supports formatting, links, lists, tables, and more.">
+    <meta name="keywords" content="markdown, converter, rich text, HTML, clipboard, paste, formatting">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Paste to Markdown - Rich Text to Markdown Converter">
+    <meta property="og:description" content="Convert rich text from your clipboard to Markdown format instantly. Free online tool.">
+    <meta property="og:url" content="https://yourusername.github.io/paste2md/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📝%3C/text%3E%3C/svg%3E">
+    
+    <style>
+        /* Import the same CSS from the extension with some modifications for web */
+        :root {
+          --primary-color: #2563eb;
+          --primary-hover: #1d4ed8;
+          --secondary-color: #64748b;
+          --secondary-hover: #475569;
+          --tertiary-color: #dc2626;
+          --tertiary-hover: #b91c1c;
+          --success-color: #059669;
+          --error-color: #dc2626;
+          --background: #ffffff;
+          --surface: #f8fafc;
+          --border: #e2e8f0;
+          --text-primary: #1e293b;
+          --text-secondary: #64748b;
+          --text-muted: #94a3b8;
+          --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+          :root {
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --secondary-color: #64748b;
+            --secondary-hover: #94a3b8;
+            --tertiary-color: #ef4444;
+            --tertiary-hover: #dc2626;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --border: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+          }
+        }
+
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+          font-size: 14px;
+          line-height: 1.5;
+          color: var(--text-primary);
+          background-color: var(--background);
+          min-height: 100vh;
+          padding: 20px;
+        }
+
+        .container {
+          max-width: 800px;
+          margin: 0 auto;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          box-shadow: var(--shadow-lg);
+          overflow: hidden;
+        }
+
+        .header {
+          background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+          color: white;
+          padding: 30px;
+          text-align: center;
+        }
+
+        .header h1 {
+          font-size: 28px;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+          font-size: 16px;
+          opacity: 0.9;
+          font-weight: 400;
+        }
+
+        .main-content {
+          padding: 30px;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+          min-height: 500px;
+        }
+
+        /* Instructions */
+        .instructions {
+          background-color: var(--background);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 20px;
+        }
+
+        .instructions h2 {
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 16px;
+          color: var(--text-primary);
+        }
+
+        .instructions ol {
+          padding-left: 24px;
+          color: var(--text-secondary);
+        }
+
+        .instructions li {
+          margin-bottom: 8px;
+        }
+
+        .instructions code {
+          background-color: var(--border);
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-size: 13px;
+          font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+        }
+
+        .keyboard-shortcuts {
+          font-size: 12px;
+          color: var(--text-muted);
+          margin-top: 16px;
+          padding-top: 12px;
+          border-top: 1px solid var(--border);
+        }
+
+        /* Actions */
+        .actions {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .btn {
+          padding: 14px 20px;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          text-decoration: none;
+          flex: 1;
+          min-width: 140px;
+        }
+
+        .btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+          background-color: var(--primary-hover);
+          transform: translateY(-1px);
+          box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+          background-color: var(--secondary-color);
+          color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+          background-color: var(--secondary-hover);
+          transform: translateY(-1px);
+          box-shadow: var(--shadow-lg);
+        }
+
+        .btn-tertiary {
+          background-color: var(--tertiary-color);
+          color: white;
+        }
+
+        .btn-tertiary:hover:not(:disabled) {
+          background-color: var(--tertiary-hover);
+          transform: translateY(-1px);
+          box-shadow: var(--shadow-lg);
+        }
+
+        /* Output section */
+        .output-section {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .output-section h3 {
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        #output {
+          flex: 1;
+          min-height: 300px;
+          padding: 16px;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+          font-size: 13px;
+          line-height: 1.5;
+          background-color: var(--background);
+          color: var(--text-primary);
+          resize: vertical;
+        }
+
+        #output:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+        }
+
+        .output-info {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 13px;
+          color: var(--text-muted);
+        }
+
+        /* Status */
+        .status {
+          font-weight: 500;
+        }
+
+        .status.loading {
+          color: var(--primary-color);
+        }
+
+        .status.success {
+          color: var(--success-color);
+        }
+
+        .status.error {
+          color: var(--error-color);
+        }
+
+        /* Error section */
+        .error-section {
+          background-color: #fef2f2;
+          border: 1px solid #fecaca;
+          border-radius: 8px;
+          padding: 16px;
+          margin-top: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .error-section {
+            background-color: #450a0a;
+            border-color: #7f1d1d;
+          }
+        }
+
+        .error-message {
+          color: var(--error-color);
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+          text-align: center;
+          padding: 24px;
+          border-top: 1px solid var(--border);
+          background: var(--background);
+        }
+
+        .footer-text {
+          font-size: 13px;
+          color: var(--text-muted);
+          margin-bottom: 8px;
+        }
+
+        .footer-text a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        .footer-text a:hover {
+          text-decoration: underline;
+        }
+
+        .github-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          color: var(--text-secondary);
+          text-decoration: none;
+          font-size: 13px;
+          margin-top: 8px;
+        }
+
+        .github-link:hover {
+          color: var(--primary-color);
+        }
+
+        /* Utility classes */
+        .hidden {
+          display: none !important;
+        }
+
+        /* Responsive design */
+        @media (max-width: 640px) {
+          body {
+            padding: 10px;
+          }
+          
+          .container {
+            border-radius: 8px;
+          }
+          
+          .header {
+            padding: 20px;
+          }
+          
+          .header h1 {
+            font-size: 24px;
+          }
+          
+          .main-content {
+            padding: 20px;
+          }
+          
+          .actions {
+            flex-direction: column;
+          }
+          
+          .btn {
+            min-width: auto;
+          }
+        }
+
+        /* Scrollbar styling */
+        #output::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        #output::-webkit-scrollbar-track {
+          background: var(--surface);
+        }
+
+        #output::-webkit-scrollbar-thumb {
+          background: var(--border);
+          border-radius: 4px;
+        }
+
+        #output::-webkit-scrollbar-thumb:hover {
+          background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Paste to Markdown</h1>
+            <p class="subtitle">Convert rich text to Markdown format instantly</p>
+        </header>
+        
+        <main class="main-content">
+            <div id="instructions" class="instructions">
+                <h2>How to Use</h2>
+                <ol>
+                    <li>Copy rich text from any source (websites, documents, emails, etc.)</li>
+                    <li>Click "Paste & Convert" below or press <code>Ctrl+V</code> / <code>⌘+V</code></li>
+                    <li>The converted Markdown will appear in the text area</li>
+                    <li>Click "Copy Markdown" or press <code>Ctrl+C</code> / <code>⌘+C</code> to copy the result</li>
+                </ol>
+                <p class="keyboard-shortcuts">
+                    <strong>Keyboard shortcuts:</strong> Ctrl+V/⌘+V to paste, Ctrl+A/⌘+A to select all, Escape to clear
+                </p>
+            </div>
+            
+            <div class="actions">
+                <button id="pasteBtn" class="btn btn-primary">
+                    📋 Paste & Convert
+                </button>
+                <button id="copyBtn" class="btn btn-secondary" disabled>
+                    📄 Copy Markdown
+                </button>
+                <button id="clearBtn" class="btn btn-tertiary" disabled>
+                    🗑️ Clear
+                </button>
+            </div>
+            
+            <div id="output-section" class="output-section hidden">
+                <h3>Converted Markdown:</h3>
+                <textarea id="output" placeholder="Converted Markdown will appear here..."></textarea>
+                <div class="output-info">
+                    <span id="char-count">0 characters</span>
+                    <span id="status" class="status"></span>
+                </div>
+            </div>
+            
+            <div id="error-section" class="error-section hidden">
+                <div class="error-message">
+                    <span id="error-text"></span>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p class="footer-text">
+                Powered by <a href="https://github.com/domchristie/to-markdown" target="_blank" rel="noopener">to-markdown</a>
+                • Based on <a href="https://github.com/euangoddard/clipboard2markdown" target="_blank" rel="noopener">clipboard2markdown</a>
+            </p>
+            <a href="https://github.com/yourusername/paste2md" class="github-link" target="_blank" rel="noopener">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                View on GitHub
+            </a>
+        </footer>
+    </div>
+    
+    <script src="to-markdown.js"></script>
+    <script src="web-app.js"></script>
+</body>
+</html>

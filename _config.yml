@@ -1,0 +1,42 @@
+# GitHub Pages configuration for Paste to Markdown
+
+title: "Paste to Markdown"
+description: "Convert rich text from your clipboard to Markdown format instantly"
+url: "https://yourusername.github.io"
+baseurl: "/paste2md"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Exclude files from processing
+exclude:
+  - manifest.json
+  - popup.html
+  - popup.js
+  - popup.css
+  - background.js
+  - content.js
+  - create-icons.js
+  - create-simple-icons.py
+  - INSTALL.md
+  - test.html
+  - node_modules/
+  - vendor/
+
+# Include files that start with underscore
+include:
+  - _config.yml
+
+# SEO and social
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Social links
+github_username: yourusername
+twitter_username: yourusername
+
+# Google Analytics (optional)
+# google_analytics: UA-XXXXXXXX-X

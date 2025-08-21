@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paste to Markdown</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Paste to Markdown</h1>
+            <p class="subtitle">Convert rich text to Markdown</p>
+        </header>
+        
+        <main>
+            <div id="instructions" class="instructions">
+                <h2>Instructions</h2>
+                <ol>
+                    <li>Copy rich text from any source (Ctrl+C / ⌘+C)</li>
+                    <li>Click "Paste & Convert" or press Ctrl+V / ⌘+V</li>
+                    <li>The converted Markdown will appear</li>
+                    <li>Click "Copy Markdown" or press Ctrl+C / ⌘+C</li>
+                </ol>
+                <p class="keyboard-shortcuts">
+                    <strong>Keyboard shortcuts:</strong> Ctrl+V/⌘+V to paste, Ctrl+A/⌘+A to select all, Escape to clear
+                </p>
+            </div>
+            
+            <div class="actions">
+                <button id="pasteBtn" class="btn btn-primary">
+                    📋 Paste & Convert
+                </button>
+                <button id="copyBtn" class="btn btn-secondary" disabled>
+                    📄 Copy Markdown
+                </button>
+                <button id="clearBtn" class="btn btn-tertiary" disabled>
+                    🗑️ Clear
+                </button>
+            </div>
+            
+            <div id="output-section" class="output-section hidden">
+                <h3>Converted Markdown:</h3>
+                <textarea id="output" readonly placeholder="Converted Markdown will appear here..."></textarea>
+                <div class="output-info">
+                    <span id="char-count">0 characters</span>
+                    <span id="status" class="status"></span>
+                </div>
+            </div>
+            
+            <div id="error-section" class="error-section hidden">
+                <div class="error-message">
+                    <span id="error-text"></span>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p class="footer-text">
+                Powered by <a href="https://github.com/domchristie/to-markdown" target="_blank">to-markdown</a>
+            </p>
+        </footer>
+    </div>
+    
+    <script src="to-markdown.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

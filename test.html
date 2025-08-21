@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Paste to Markdown Extension</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-content {
+            border: 2px solid #e2e8f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+        .instructions {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #e5e7eb;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background: #f3f4f6;
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #3b82f6;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #4b5563;
+        }
+        .highlight {
+            background: yellow;
+            padding: 2px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Content for Paste to Markdown Extension</h1>
+    
+    <div class="instructions">
+        <h3>How to Test:</h3>
+        <ol>
+            <li>Select and copy any of the formatted content below</li>
+            <li>Open the Paste to Markdown extension</li>
+            <li>Click "Paste & Convert"</li>
+            <li>Verify the Markdown output is correct</li>
+        </ol>
+    </div>
+
+    <div class="test-content">
+        <h2>Rich Text Formatting Examples</h2>
+        
+        <h3>Text Formatting</h3>
+        <p>This paragraph contains <strong>bold text</strong>, <em>italic text</em>, and <code>inline code</code>.</p>
+        <p>You can also have <span class="highlight">highlighted text</span> and <del>strikethrough text</del>.</p>
+        
+        <h3>Links and Images</h3>
+        <p>Here's a <a href="https://example.com" title="Example Website">link to example.com</a>.</p>
+        <p>And here's an email link: <a href="mailto:test@example.com">test@example.com</a></p>
+        
+        <h3>Lists</h3>
+        <h4>Unordered List:</h4>
+        <ul>
+            <li><p>First item</p></li>
+            <li><p>Second item with <strong>bold text</strong></p></li>
+            <li><p>Third item</p>
+                <ul>
+                    <li>Nested item 1</li>
+                    <li>Nested item 2</li>
+                </ul>
+            </li>
+            <li><p>Fourth item</p></li>
+        </ul>
+
+        <h4>Simple List (should have no extra spacing):</h4>
+        <ul>
+            <li>A</li>
+            <li>B</li>
+            <li>C</li>
+        </ul>
+        
+        <h4>Ordered List:</h4>
+        <ol>
+            <li>First numbered item</li>
+            <li>Second numbered item</li>
+            <li>Third numbered item with <em>italic text</em></li>
+        </ol>
+        
+        <h3>Code Blocks</h3>
+        <p>Inline code: <code>console.log('Hello World')</code></p>
+        
+        <p>Code block:</p>
+        <pre><code>function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+console.log(greet('World'));</code></pre>
+        
+        <h3>Blockquotes</h3>
+        <blockquote>
+            <p>This is a blockquote. It can contain multiple paragraphs.</p>
+            <p>Like this second paragraph with <strong>bold text</strong> inside.</p>
+        </blockquote>
+        
+        <h3>Tables</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>City</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Doe</td>
+                    <td>30</td>
+                    <td>New York</td>
+                </tr>
+                <tr>
+                    <td>Jane Smith</td>
+                    <td>25</td>
+                    <td>Los Angeles</td>
+                </tr>
+                <tr>
+                    <td>Bob Johnson</td>
+                    <td>35</td>
+                    <td>Chicago</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Horizontal Rule</h3>
+        <p>Content above the rule.</p>
+        <hr>
+        <p>Content below the rule.</p>
+        
+        <h3>Mixed Content</h3>
+        <p>This paragraph combines <strong>bold</strong>, <em>italic</em>, <code>code</code>, and a <a href="https://example.com">link</a> all together.</p>
+        
+        <blockquote>
+            <p>A quote with a <a href="https://example.com">link</a> and <strong>bold text</strong>.</p>
+        </blockquote>
+        
+        <ul>
+            <li>List item with <code>inline code</code></li>
+            <li>List item with a <a href="https://example.com">link</a></li>
+            <li>List item with <strong>bold</strong> and <em>italic</em> text</li>
+        </ul>
+    </div>
+
+    <div class="test-content">
+        <h2>Expected Markdown Output Examples</h2>
+        <p>When you copy the content above, you should get Markdown like this:</p>
+        
+        <pre><code>## Rich Text Formatting Examples
+
+### Text Formatting
+This paragraph contains **bold text**, *italic text*, and `inline code`.
+
+### Links
+Here's a [link to example.com](https://example.com "Example Website").
+
+### Lists
+#### Unordered List:
+- First item
+- Second item with **bold text**
+- Third item
+    - Nested item 1
+    - Nested item 2
+- Fourth item
+
+#### Ordered List:
+1. First numbered item
+2. Second numbered item
+3. Third numbered item with *italic text*
+
+### Code Blocks
+Inline code: `console.log('Hello World')`
+
+Code block:
+```
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+console.log(greet('World'));
+```
+
+### Blockquotes
+> This is a blockquote. It can contain multiple paragraphs.
+> 
+> Like this second paragraph with **bold text** inside.
+
+### Tables
+| Name | Age | City |
+| --- | --- | --- |
+| John Doe | 30 | New York |
+| Jane Smith | 25 | Los Angeles |
+| Bob Johnson | 35 | Chicago |</code></pre>
+    </div>
+
+    <script>
+        // Add some interactivity for testing
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded. Ready for extension testing.');
+            
+            // Add click handlers to test content for easy selection
+            const testContents = document.querySelectorAll('.test-content');
+            testContents.forEach(content => {
+                content.addEventListener('click', function() {
+                    const selection = window.getSelection();
+                    const range = document.createRange();
+                    range.selectNodeContents(this);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
