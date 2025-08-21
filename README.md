@@ -83,20 +83,36 @@ This extension is based on the excellent [clipboard2markdown](https://github.com
 
 ## Development
 
+## Deployment
+
+### 🌐 **Deploy Web App to GitHub Pages**
+See [DEPLOY.md](DEPLOY.md) for complete deployment instructions.
+
+Quick steps:
+1. Push this repository to GitHub
+2. Enable GitHub Pages in repository settings
+3. Your web app will be live at `https://yourusername.github.io/paste2md/`
+
 ### Project Structure
 ```
 paste2md/
-├── manifest.json          # Extension manifest
-├── popup.html            # Extension popup UI
-├── popup.js              # Popup logic and conversion
-├── popup.css             # Popup styling
-├── background.js         # Background service worker
-├── content.js            # Content script for page interaction
-├── to-markdown.js        # Core conversion library
-├── test.html             # Test page with sample content
-├── INSTALL.md            # Installation guide
-└── README.md            # This file
+├── index.html            # 🌐 Web app main page
+├── web-app.js           # 🌐 Web app logic
+├── to-markdown.js       # 📚 Shared conversion library
+├── _config.yml          # 🌐 GitHub Pages config
+├── DEPLOY.md            # 🌐 Deployment guide
+├── manifest.json        # 🔧 Extension manifest
+├── popup.html           # 🔧 Extension popup UI
+├── popup.js             # 🔧 Extension logic
+├── popup.css            # 🔧 Extension styling
+├── background.js        # 🔧 Extension service worker
+├── content.js           # 🔧 Extension content script
+├── test.html            # 🧪 Test page with sample content
+├── INSTALL.md           # 🔧 Extension installation guide
+└── README.md            # 📖 This file
 ```
+
+🌐 = Web app files | 🔧 = Extension files | 📚 = Shared | 🧪 = Testing
 
 ### Building
 No build process required - this is a pure JavaScript extension.
