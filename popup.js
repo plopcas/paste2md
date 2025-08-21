@@ -66,37 +66,70 @@
       }
 
       // Read clipboard content
-      const clipboardItems = await navigator.clipboard.read();
-      
-      if (clipboardItems.length === 0) {
-        throw new Error('Clipboard is empty');
-      }
-
+      let clipboardItems;
       let htmlContent = '';
       let textContent = '';
 
-      // Try to get HTML content first, fall back to text
-      for (const clipboardItem of clipboardItems) {
-        if (clipboardItem.types.includes('text/html')) {
-          const blob = await clipboardItem.getType('text/html');
-          htmlContent = await blob.text();
-          break;
-        } else if (clipboardItem.types.includes('text/plain')) {
-          const blob = await clipboardItem.getType('text/plain');
-          textContent = await blob.text();
+      try {
+        clipboardItems = await navigator.clipboard.read();
+
+        if (clipboardItems.length === 0) {
+          throw new Error('Clipboard is empty');
+        }
+
+        // Try to get HTML content first, fall back to text
+        for (const clipboardItem of clipboardItems) {
+          if (clipboardItem.types.includes('text/html') && !htmlContent) {
+            const blob = await clipboardItem.getType('text/html');
+            htmlContent = await blob.text();
+          }
+          if (clipboardItem.types.includes('text/plain') && !textContent) {
+            const blob = await clipboardItem.getType('text/plain');
+            textContent = await blob.text();
+          }
+
+          // If we have both, we can break early
+          if (htmlContent && textContent) {
+            break;
+          }
+        }
+      } catch (clipboardError) {
+        // Fallback to readText() for browsers that don't support read()
+        console.log('clipboard.read() failed, trying readText():', clipboardError);
+        try {
+          textContent = await navigator.clipboard.readText();
+        } catch (textError) {
+          console.log('clipboard.readText() also failed:', textError);
+          throw new Error('Unable to access clipboard. Please check browser permissions or try copying the content again.');
         }
       }
 
+      // Debug logging
+      console.log('Clipboard content found:', {
+        hasHtml: !!htmlContent,
+        hasText: !!textContent,
+        htmlLength: htmlContent?.length || 0,
+        textLength: textContent?.length || 0
+      });
+
       // Convert to markdown
       let markdown = '';
-      if (htmlContent) {
+      if (htmlContent && htmlContent.trim()) {
         setStatus('Converting HTML to Markdown...', 'loading');
         markdown = convertHtmlToMarkdown(htmlContent);
-      } else if (textContent) {
+      } else if (textContent && textContent.trim()) {
         setStatus('Processing plain text...', 'loading');
         markdown = textContent; // Plain text doesn't need conversion
       } else {
-        throw new Error('No text or HTML content found in clipboard');
+        // More specific error message
+        const clipboardInfo = [];
+        if (clipboardItems) {
+          for (const item of clipboardItems) {
+            clipboardInfo.push(`Types: ${item.types.join(', ')}`);
+          }
+        }
+        const debugInfo = clipboardInfo.length > 0 ? ` Available types: ${clipboardInfo.join('; ')}` : '';
+        throw new Error(`No text or HTML content found in clipboard.${debugInfo} Try copying the content again.`);
       }
 
       // Clean up the markdown
@@ -113,7 +146,13 @@
 
     } catch (error) {
       console.error('Paste error:', error);
-      showError(error.message);
+
+      // If it's a clipboard access issue, offer manual paste option
+      if (error.message.includes('clipboard') || error.message.includes('permission')) {
+        showManualPasteOption();
+      } else {
+        showError(error.message);
+      }
       setStatus('', '');
     } finally {
       pasteBtn.disabled = false;
@@ -346,6 +385,55 @@
 
   function hideError() {
     errorSection.classList.add('hidden');
+  }
+
+  function showManualPasteOption() {
+    showError('Clipboard access failed. You can manually paste content into the text area below and click "Convert".');
+
+    // Show the output section for manual input
+    outputSection.classList.remove('hidden');
+    instructions.classList.add('hidden');
+    output.placeholder = 'Paste your content here (Ctrl+V / ⌘+V), then click "Convert"...';
+    output.focus();
+
+    // Change button text temporarily
+    const originalText = pasteBtn.textContent;
+    pasteBtn.textContent = '🔄 Convert';
+
+    // Set up one-time manual conversion
+    const handleManualConvert = () => {
+      if (output.value.trim()) {
+        try {
+          setStatus('Converting...', 'loading');
+          let markdown = output.value;
+
+          // Try to detect if it's HTML
+          if (output.value.includes('<') && output.value.includes('>')) {
+            markdown = convertHtmlToMarkdown(output.value);
+          }
+
+          markdown = cleanupMarkdown(markdown);
+          output.value = markdown;
+          setStatus('Conversion complete!', 'success');
+
+          // Restore button
+          pasteBtn.textContent = originalText;
+          pasteBtn.removeEventListener('click', handleManualConvert);
+          pasteBtn.addEventListener('click', handlePaste);
+          output.placeholder = '';
+          hideError();
+
+        } catch (error) {
+          showError('Conversion failed: ' + error.message);
+        }
+      } else {
+        showError('Please paste some content first.');
+      }
+    };
+
+    // Replace the click handler temporarily
+    pasteBtn.removeEventListener('click', handlePaste);
+    pasteBtn.addEventListener('click', handleManualConvert);
   }
 
 })();

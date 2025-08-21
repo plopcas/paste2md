@@ -32,12 +32,17 @@ function getSelectedHTML() {
   return html;
 }
 
-// Optional: Add keyboard shortcut listener
+// Fallback keyboard shortcut listener (in case commands API doesn't work)
 document.addEventListener('keydown', (event) => {
-  // Ctrl+Shift+M or Cmd+Shift+M to trigger conversion
-  if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'M') {
+  // Use platform-specific modifier keys:
+  // - Mac: Cmd+Shift+M (metaKey + shiftKey + M)
+  // - Windows/Linux: Ctrl+Shift+M (ctrlKey + shiftKey + M)
+  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+  const correctModifier = isMac ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey;
+
+  if (correctModifier && event.shiftKey && event.key === 'M') {
     event.preventDefault();
-    
+
     // Send message to background script to open popup
     chrome.runtime.sendMessage({
       action: 'openPopup'

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Shortcut Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-area {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .result {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        .platform-info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #2196f3;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Keyboard Shortcut Test</h1>
+    
+    <div class="platform-info">
+        <strong>Platform Detection:</strong>
+        <div id="platform-info"></div>
+    </div>
+    
+    <div class="test-area">
+        <h2>Test the Keyboard Shortcut</h2>
+        <p>Try pressing the keyboard shortcut for your platform:</p>
+        <ul>
+            <li><strong>Mac:</strong> <code>Cmd + Shift + M</code></li>
+            <li><strong>Windows/Linux:</strong> <code>Ctrl + Shift + M</code></li>
+        </ul>
+        
+        <div id="shortcut-results"></div>
+    </div>
+    
+    <div class="test-area">
+        <h2>Extension Installation Test</h2>
+        <p>This test checks if the Chrome extension is properly installed and configured:</p>
+        <button id="test-extension">Test Extension</button>
+        <div id="extension-results"></div>
+    </div>
+
+    <script>
+        // Platform detection
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const isWindows = navigator.platform.toUpperCase().indexOf('WIN') >= 0;
+        const isLinux = navigator.platform.toUpperCase().indexOf('LINUX') >= 0;
+        
+        document.getElementById('platform-info').innerHTML = `
+            <div>Platform: ${navigator.platform}</div>
+            <div>Detected as: ${isMac ? 'Mac' : isWindows ? 'Windows' : isLinux ? 'Linux' : 'Unknown'}</div>
+            <div>Expected shortcut: ${isMac ? 'Cmd + Shift + M' : 'Ctrl + Shift + M'}</div>
+        `;
+        
+        // Keyboard shortcut test
+        let shortcutPressed = false;
+        document.addEventListener('keydown', (event) => {
+            const correctModifier = isMac ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey;
+            
+            if (correctModifier && event.shiftKey && event.key === 'M') {
+                event.preventDefault();
+                shortcutPressed = true;
+                
+                const result = document.createElement('div');
+                result.className = 'result';
+                result.innerHTML = `
+                    <strong>✅ Shortcut detected!</strong><br>
+                    Platform: ${isMac ? 'Mac' : 'Windows/Linux'}<br>
+                    Keys pressed: ${event.metaKey ? 'Cmd' : ''}${event.ctrlKey ? 'Ctrl' : ''} + Shift + M<br>
+                    Time: ${new Date().toLocaleTimeString()}
+                `;
+                
+                const resultsDiv = document.getElementById('shortcut-results');
+                resultsDiv.appendChild(result);
+                
+                // Try to send message to extension if available
+                if (typeof chrome !== 'undefined' && chrome.runtime) {
+                    chrome.runtime.sendMessage({action: 'openPopup'}, (response) => {
+                        if (chrome.runtime.lastError) {
+                            console.log('Extension not available:', chrome.runtime.lastError);
+                        } else {
+                            console.log('Extension message sent successfully');
+                        }
+                    });
+                }
+            }
+        });
+        
+        // Extension test
+        document.getElementById('test-extension').addEventListener('click', () => {
+            const resultsDiv = document.getElementById('extension-results');
+            
+            if (typeof chrome === 'undefined' || !chrome.runtime) {
+                resultsDiv.innerHTML = '<div style="color: red;">❌ Chrome extension API not available. This test only works when loaded as part of a Chrome extension.</div>';
+                return;
+            }
+            
+            // Test if extension is available
+            chrome.runtime.sendMessage({action: 'openPopup'}, (response) => {
+                if (chrome.runtime.lastError) {
+                    resultsDiv.innerHTML = `<div style="color: red;">❌ Extension error: ${chrome.runtime.lastError.message}</div>`;
+                } else {
+                    resultsDiv.innerHTML = '<div style="color: green;">✅ Extension is working correctly!</div>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
