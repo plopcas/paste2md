@@ -2,8 +2,9 @@
 
 title: "Paste to Markdown"
 description: "Convert rich text from your clipboard to Markdown format instantly"
-url: "https://yourusername.github.io"
-baseurl: "/paste2md"
+# GitHub Pages will automatically set these based on repository
+# url: auto-detected from repository
+# baseurl: auto-detected from repository name
 
 # Build settings
 markdown: kramdown
@@ -34,9 +35,8 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
-# Social links
-github_username: yourusername
-twitter_username: yourusername
+# Social links - GitHub Pages will auto-detect repository owner
+# github_username: auto-detected from repository
 
 # Google Analytics (optional)
 # google_analytics: UA-XXXXXXXX-X

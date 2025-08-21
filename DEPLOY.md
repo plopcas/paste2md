@@ -39,19 +39,19 @@ git push -u origin main
 5. Choose **main** branch and **/ (root)** folder
 6. Click **Save**
 
-### 4. **Update Configuration**
+### 4. **Configuration (Optional)**
 
-Edit `_config.yml` and update:
+The app is designed to auto-detect GitHub repository information, but you can customize:
+
+Edit `_config.yml` if needed:
 ```yaml
-url: "https://YOURUSERNAME.github.io"
-baseurl: "/paste2md"  # Use your actual repo name
-github_username: YOURUSERNAME
+title: "Your Custom Title"
+description: "Your custom description"
+# url and baseurl are auto-detected by GitHub Pages
+# github_username is auto-detected from repository
 ```
 
-Edit `index.html` and update the Open Graph URL:
-```html
-<meta property="og:url" content="https://YOURUSERNAME.github.io/paste2md/">
-```
+**Note**: The app automatically detects repository URLs and usernames, so manual configuration is usually not needed.
 
 ### 5. **Access Your Site**
 

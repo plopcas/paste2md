@@ -2,7 +2,7 @@
 
 Convert rich text from your clipboard to Markdown format with a single click. Available as both a **Chrome extension** and a **standalone web app**.
 
-## 🌐 **[Try the Web App](https://yourusername.github.io/paste2md/)** | 🔧 **[Install Chrome Extension](#installation)**
+## 🌐 **[Try the Web App](https://plopcas.github.io/paste2md/)** | 🔧 **[Install Chrome Extension](#two-ways-to-use)**
 
 ## Features
 
@@ -18,7 +18,7 @@ Convert rich text from your clipboard to Markdown format with a single click. Av
 ### 🌐 **Web App** (Recommended)
 **No installation required!** Use it directly in your browser:
 
-**👉 [paste2md.yourdomain.com](https://yourusername.github.io/paste2md/)**
+**👉 [Live Demo](https://plopcas.github.io/paste2md/)** *(or your deployed GitHub Pages URL)*
 
 - ✅ Works on any device (desktop, mobile, tablet)
 - ✅ No browser restrictions
@@ -91,7 +91,7 @@ See [DEPLOY.md](DEPLOY.md) for complete deployment instructions.
 Quick steps:
 1. Push this repository to GitHub
 2. Enable GitHub Pages in repository settings
-3. Your web app will be live at `https://yourusername.github.io/paste2md/`
+3. Your web app will be live at `https://USERNAME.github.io/REPOSITORY-NAME/`
 
 ### Project Structure
 ```
