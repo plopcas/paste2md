@@ -28,14 +28,14 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
 
-# SEO settings
-author: "Pedro Lopez"
-twitter:
-  username: plopcas
-  card: summary
+# SEO settings (customize as needed)
+# author: "Your Name"
+# twitter:
+#   username: your_username
+#   card: summary
 
-# Social links
-github_username: plopcas
+# Social links (customize as needed)
+# github_username: your_username
 
 # Google Analytics (optional)
 # google_analytics: UA-XXXXXXXX-X
