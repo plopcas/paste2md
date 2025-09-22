@@ -5,12 +5,13 @@
   'use strict';
 
   // DOM elements
-  let pasteBtn, copyBtn, clearBtn, output, outputSection, errorSection, errorText, charCount, status, instructions;
+  let pasteBtn, copyBtn, clearBtn, output, outputSection, errorSection, errorText, charCount, status, instructions, themeToggle, themeIcon, themeText;
 
   // Initialize the web app
   document.addEventListener('DOMContentLoaded', function() {
     initializeElements();
     setupEventListeners();
+    initializeTheme();
     updateUI();
     
     // Show a welcome message
@@ -28,6 +29,9 @@
     charCount = document.getElementById('char-count');
     status = document.getElementById('status');
     instructions = document.getElementById('instructions');
+    themeToggle = document.getElementById('themeToggle');
+    themeIcon = document.querySelector('.theme-icon');
+    themeText = document.querySelector('.theme-text');
   }
 
   function setupEventListeners() {
@@ -35,6 +39,7 @@
     copyBtn.addEventListener('click', handleCopy);
     clearBtn.addEventListener('click', handleClear);
     output.addEventListener('input', updateCharCount);
+    themeToggle.addEventListener('click', handleThemeToggle);
     
     // Add keyboard shortcut support
     document.addEventListener('keydown', handleKeydown);
@@ -440,6 +445,130 @@
 
   function hideError() {
     errorSection.classList.add('hidden');
+  }
+
+  // Theme management functions
+  const THEME_KEY = 'paste2md-theme';
+  const THEMES = {
+    AUTO: 'auto',
+    LIGHT: 'light',
+    DARK: 'dark'
+  };
+
+  const THEME_CONFIG = {
+    [THEMES.AUTO]: { icon: '🌓', text: 'Auto' },
+    [THEMES.LIGHT]: { icon: '☀️', text: 'Light' },
+    [THEMES.DARK]: { icon: '🌙', text: 'Dark' }
+  };
+
+  function initializeTheme() {
+    // Get saved theme or default to auto
+    const savedTheme = getSavedTheme();
+    applyTheme(savedTheme);
+    updateThemeToggleUI(savedTheme);
+
+    // Listen for system theme changes when in auto mode
+    if (window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addListener(handleSystemThemeChange);
+    }
+  }
+
+  function getSavedTheme() {
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      return Object.values(THEMES).includes(saved) ? saved : THEMES.AUTO;
+    } catch (error) {
+      console.warn('localStorage not available for theme persistence:', error);
+      return THEMES.AUTO;
+    }
+  }
+
+  function saveTheme(theme) {
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (error) {
+      console.warn('Unable to save theme to localStorage:', error);
+    }
+  }
+
+  function applyTheme(theme) {
+    // Apply the theme to the document element
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Add smooth transition class if not already present
+    if (!document.documentElement.classList.contains('theme-transitioning')) {
+      document.documentElement.classList.add('theme-transitioning');
+      
+      // Remove the class after transitions complete
+      setTimeout(() => {
+        document.documentElement.classList.remove('theme-transitioning');
+      }, 300);
+    }
+  }
+
+  function updateThemeToggleUI(currentTheme) {
+    const config = THEME_CONFIG[currentTheme];
+    if (config && themeIcon && themeText) {
+      themeIcon.textContent = config.icon;
+      themeIcon.setAttribute('data-theme', currentTheme);
+      themeText.textContent = config.text;
+      
+      // Update the title attribute for accessibility
+      themeToggle.title = `Current theme: ${config.text}. Click to switch theme.`;
+    }
+  }
+
+  function handleThemeToggle() {
+    const currentTheme = getSavedTheme();
+    let nextTheme;
+
+    // Cycle through themes: auto -> light -> dark -> auto
+    switch (currentTheme) {
+      case THEMES.AUTO:
+        nextTheme = THEMES.LIGHT;
+        break;
+      case THEMES.LIGHT:
+        nextTheme = THEMES.DARK;
+        break;
+      case THEMES.DARK:
+        nextTheme = THEMES.AUTO;
+        break;
+      default:
+        nextTheme = THEMES.AUTO;
+    }
+
+    saveTheme(nextTheme);
+    applyTheme(nextTheme);
+    updateThemeToggleUI(nextTheme);
+
+    // Log theme change for debugging
+    console.log(`Theme changed from ${currentTheme} to ${nextTheme}`);
+  }
+
+  function handleSystemThemeChange(mediaQuery) {
+    // Only respond to system theme changes if we're in auto mode
+    const currentTheme = getSavedTheme();
+    if (currentTheme === THEMES.AUTO) {
+      // Re-apply auto theme to trigger CSS updates
+      applyTheme(THEMES.AUTO);
+      console.log(`System theme changed, auto theme updated (dark: ${mediaQuery.matches})`);
+    }
+  }
+
+  // Expose theme functions for debugging (optional)
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    window.themeDebug = {
+      getCurrentTheme: getSavedTheme,
+      setTheme: (theme) => {
+        if (Object.values(THEMES).includes(theme)) {
+          saveTheme(theme);
+          applyTheme(theme);
+          updateThemeToggleUI(theme);
+        }
+      },
+      themes: THEMES
+    };
   }
 
 })();

@@ -4,12 +4,28 @@
   'use strict';
 
   // DOM elements
-  let pasteBtn, copyBtn, clearBtn, output, outputSection, errorSection, errorText, charCount, status, instructions;
+  let pasteBtn, copyBtn, clearBtn, output, outputSection, errorSection, errorText, charCount, status, instructions, themeToggle, themeIcon;
+
+  // Theme state
+  const THEMES = {
+    AUTO: 'auto',
+    LIGHT: 'light', 
+    DARK: 'dark'
+  };
+
+  const THEME_ICONS = {
+    [THEMES.AUTO]: '🌓',
+    [THEMES.LIGHT]: '☀️',
+    [THEMES.DARK]: '🌙'
+  };
+
+  let currentTheme = THEMES.AUTO;
 
   // Initialize the popup
   document.addEventListener('DOMContentLoaded', function() {
     initializeElements();
     setupEventListeners();
+    initializeTheme();
     updateUI();
   });
 
@@ -24,6 +40,8 @@
     charCount = document.getElementById('char-count');
     status = document.getElementById('status');
     instructions = document.getElementById('instructions');
+    themeToggle = document.getElementById('themeToggle');
+    themeIcon = document.querySelector('.theme-icon');
   }
 
   function setupEventListeners() {
@@ -31,6 +49,7 @@
     copyBtn.addEventListener('click', handleCopy);
     clearBtn.addEventListener('click', handleClear);
     output.addEventListener('input', updateCharCount);
+    themeToggle.addEventListener('click', handleThemeToggle);
 
     // Add keyboard shortcut support
     document.addEventListener('keydown', handleKeydown);
@@ -434,6 +453,77 @@
     // Replace the click handler temporarily
     pasteBtn.removeEventListener('click', handlePaste);
     pasteBtn.addEventListener('click', handleManualConvert);
+  }
+
+  // Theme management functions
+  async function initializeTheme() {
+    try {
+      const result = await chrome.storage.sync.get(['theme']);
+      currentTheme = result.theme || THEMES.AUTO;
+      applyTheme(currentTheme);
+      updateThemeIcon();
+    } catch (error) {
+      console.error('Failed to load theme preference:', error);
+      // Fallback to auto theme
+      currentTheme = THEMES.AUTO;
+      applyTheme(currentTheme);
+      updateThemeIcon();
+    }
+  }
+
+  async function handleThemeToggle() {
+    // Cycle through themes: auto -> light -> dark -> auto
+    switch (currentTheme) {
+      case THEMES.AUTO:
+        currentTheme = THEMES.LIGHT;
+        break;
+      case THEMES.LIGHT:
+        currentTheme = THEMES.DARK;
+        break;
+      case THEMES.DARK:
+        currentTheme = THEMES.AUTO;
+        break;
+    }
+
+    applyTheme(currentTheme);
+    updateThemeIcon();
+
+    try {
+      await chrome.storage.sync.set({ theme: currentTheme });
+    } catch (error) {
+      console.error('Failed to save theme preference:', error);
+    }
+  }
+
+  function applyTheme(theme) {
+    const body = document.body;
+    
+    // Remove existing theme classes
+    body.classList.remove('theme-light', 'theme-dark');
+    
+    // Apply new theme class (auto doesn't need a class - uses CSS media query)
+    if (theme === THEMES.LIGHT) {
+      body.classList.add('theme-light');
+    } else if (theme === THEMES.DARK) {
+      body.classList.add('theme-dark');
+    }
+    
+    // Update theme toggle title
+    const themeNames = {
+      [THEMES.AUTO]: 'Auto (follow system)',
+      [THEMES.LIGHT]: 'Light mode',
+      [THEMES.DARK]: 'Dark mode'
+    };
+    
+    if (themeToggle) {
+      themeToggle.title = `Current: ${themeNames[theme]}. Click to change theme.`;
+    }
+  }
+
+  function updateThemeIcon() {
+    if (themeIcon) {
+      themeIcon.textContent = THEME_ICONS[currentTheme];
+    }
   }
 
 })();

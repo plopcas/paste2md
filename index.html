@@ -38,9 +38,62 @@
           --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
 
-        /* Dark mode support */
+        /* Smooth theme transitions */
+        html.theme-transitioning,
+        html.theme-transitioning *,
+        html.theme-transitioning *:before,
+        html.theme-transitioning *:after {
+          transition: background-color 0.3s ease, 
+                      border-color 0.3s ease, 
+                      color 0.3s ease, 
+                      fill 0.3s ease, 
+                      stroke 0.3s ease,
+                      box-shadow 0.3s ease !important;
+        }
+
+        /* Manual light theme (highest specificity) */
+        html[data-theme="light"] {
+          --primary-color: #2563eb;
+          --primary-hover: #1d4ed8;
+          --secondary-color: #64748b;
+          --secondary-hover: #475569;
+          --tertiary-color: #dc2626;
+          --tertiary-hover: #b91c1c;
+          --success-color: #059669;
+          --error-color: #dc2626;
+          --background: #ffffff;
+          --surface: #f8fafc;
+          --border: #e2e8f0;
+          --text-primary: #1e293b;
+          --text-secondary: #64748b;
+          --text-muted: #94a3b8;
+          --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        /* Manual dark theme (highest specificity) */
+        html[data-theme="dark"] {
+          --primary-color: #3b82f6;
+          --primary-hover: #2563eb;
+          --secondary-color: #64748b;
+          --secondary-hover: #94a3b8;
+          --tertiary-color: #ef4444;
+          --tertiary-hover: #dc2626;
+          --success-color: #10b981;
+          --error-color: #ef4444;
+          --background: #0f172a;
+          --surface: #1e293b;
+          --border: #334155;
+          --text-primary: #f1f5f9;
+          --text-secondary: #cbd5e1;
+          --text-muted: #64748b;
+          --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+        }
+
+        /* Auto theme fallback - only applies when no manual theme is set or data-theme="auto" */
         @media (prefers-color-scheme: dark) {
-          :root {
+          html:not([data-theme]), html[data-theme="auto"] {
             --primary-color: #3b82f6;
             --primary-hover: #2563eb;
             --secondary-color: #64748b;
@@ -64,6 +117,7 @@
           box-sizing: border-box;
           margin: 0;
           padding: 0;
+          transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         body {
@@ -90,7 +144,19 @@
           background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
           color: white;
           padding: 30px;
+          position: relative;
+        }
+
+        .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .title-section {
           text-align: center;
+          flex: 1;
         }
 
         .header h1 {
@@ -104,6 +170,57 @@
           opacity: 0.9;
           font-weight: 400;
         }
+
+        .theme-toggle {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 18px;
+          padding: 8px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .theme-toggle:hover {
+          transform: scale(1.1);
+        }
+
+        .theme-toggle:active {
+          transform: scale(0.95);
+        }
+
+        .theme-icon {
+          font-size: 18px;
+          line-height: 1;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 18px;
+          padding: 8px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .theme-toggle:hover {
+          transform: scale(1.1);
+        }
+
+        .theme-toggle:focus {
+          outline: none;
+        }
+
+
 
         .main-content {
           padding: 30px;
@@ -281,10 +398,19 @@
           border-radius: 8px;
           padding: 16px;
           margin-top: 16px;
+          transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
+        /* Manual dark theme error styling */
+        html[data-theme="dark"] .error-section {
+          background-color: #450a0a;
+          border-color: #7f1d1d;
+        }
+
+        /* Auto theme fallback for error section */
         @media (prefers-color-scheme: dark) {
-          .error-section {
+          html:not([data-theme]) .error-section,
+          html[data-theme="auto"] .error-section {
             background-color: #450a0a;
             border-color: #7f1d1d;
           }
@@ -333,6 +459,35 @@
           color: var(--primary-color);
         }
 
+        /* Theme toggle button */
+        .theme-toggle {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 18px;
+          padding: 8px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .theme-toggle:hover {
+          transform: scale(1.1);
+        }
+
+        .theme-toggle:active {
+          transform: scale(0.95);
+        }
+
+        /* Adjust header to accommodate theme toggle */
+        .header {
+          position: relative;
+        }
+
         /* Utility classes */
         .hidden {
           display: none !important;
@@ -351,6 +506,22 @@
           .header {
             padding: 20px;
           }
+
+          .header-content {
+            flex-direction: column;
+            gap: 16px;
+          }
+
+          .title-section {
+            order: 1;
+          }
+
+          .theme-toggle {
+            order: 0;
+            align-self: flex-end;
+            font-size: 16px;
+            padding: 6px;
+          }
           
           .header h1 {
             font-size: 24px;
@@ -366,6 +537,14 @@
           
           .btn {
             min-width: auto;
+          }
+          
+          .theme-text {
+            font-size: 11px;
+          }
+          
+          .theme-icon {
+            font-size: 14px;
           }
         }
 
@@ -391,8 +570,15 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>Paste to Markdown</h1>
-            <p class="subtitle">Convert rich text to Markdown format instantly</p>
+            <div class="header-content">
+                <div class="title-section">
+                    <h1>Paste to Markdown</h1>
+                    <p class="subtitle">Convert rich text to Markdown format instantly</p>
+                </div>
+                <button id="themeToggle" class="theme-toggle" title="Toggle theme (auto/light/dark)">
+                    <span class="theme-icon" data-theme="auto">🌓</span>
+                </button>
+            </div>
         </header>
         
         <main class="main-content">
@@ -473,6 +659,61 @@
             if (ogUrl) {
                 ogUrl.content = window.location.origin + window.location.pathname;
             }
+
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.querySelector('.theme-icon');
+            
+            const themes = ['auto', 'light', 'dark'];
+            const themeIcons = {
+                'auto': '🌓',
+                'light': '☀️',
+                'dark': '🌙'
+            };
+            
+            // Get stored theme or default to 'auto'
+            let currentTheme = localStorage.getItem('theme') || 'auto';
+            
+            function updateThemeButton(theme) {
+                themeIcon.textContent = themeIcons[theme];
+                themeIcon.setAttribute('data-theme', theme);
+
+                // Update ARIA label
+                themeToggle.setAttribute('aria-label', `Current theme: ${theme}. Click to cycle through auto, light, and dark modes.`);
+                themeToggle.setAttribute('title', `Current: ${theme} mode. Click to cycle through auto/light/dark.`);
+            }
+            
+            function applyTheme(theme) {
+                const htmlElement = document.documentElement;
+                
+                if (theme === 'auto') {
+                    htmlElement.removeAttribute('data-theme');
+                } else {
+                    htmlElement.setAttribute('data-theme', theme);
+                }
+                
+                localStorage.setItem('theme', theme);
+                updateThemeButton(theme);
+            }
+            
+            // Apply initial theme
+            applyTheme(currentTheme);
+            
+            // Theme toggle click handler
+            themeToggle.addEventListener('click', function() {
+                const currentIndex = themes.indexOf(currentTheme);
+                const nextIndex = (currentIndex + 1) % themes.length;
+                currentTheme = themes[nextIndex];
+                applyTheme(currentTheme);
+            });
+            
+            // Keyboard support
+            themeToggle.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    themeToggle.click();
+                }
+            });
         });
     </script>
 </body>
