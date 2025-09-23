@@ -38,6 +38,26 @@
           --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
 
+        /* Green theme for markdown-to-rich-text mode */
+        html[data-mode="md2rich"] {
+          --primary-color: #059669;
+          --primary-hover: #047857;
+          --secondary-color: #64748b;
+          --secondary-hover: #475569;
+          --tertiary-color: #dc2626;
+          --tertiary-hover: #b91c1c;
+          --success-color: #10b981;
+          --error-color: #dc2626;
+          --background: #ffffff;
+          --surface: #f0fdf4;
+          --border: #d1fae5;
+          --text-primary: #1e293b;
+          --text-secondary: #64748b;
+          --text-muted: #94a3b8;
+          --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
         /* Smooth theme transitions */
         html.theme-transitioning,
         html.theme-transitioning *,
@@ -91,6 +111,26 @@
           --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
         }
 
+        /* Green dark theme for markdown-to-rich-text mode */
+        html[data-mode="md2rich"][data-theme="dark"] {
+          --primary-color: #10b981;
+          --primary-hover: #059669;
+          --secondary-color: #64748b;
+          --secondary-hover: #94a3b8;
+          --tertiary-color: #ef4444;
+          --tertiary-hover: #dc2626;
+          --success-color: #34d399;
+          --error-color: #ef4444;
+          --background: #0f172a;
+          --surface: #1a2e1a;
+          --border: #2d5a2d;
+          --text-primary: #f1f5f9;
+          --text-secondary: #cbd5e1;
+          --text-muted: #64748b;
+          --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+        }
+
         /* Auto theme fallback - only applies when no manual theme is set or data-theme="auto" */
         @media (prefers-color-scheme: dark) {
           html:not([data-theme]), html[data-theme="auto"] {
@@ -105,6 +145,26 @@
             --background: #0f172a;
             --surface: #1e293b;
             --border: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+          }
+
+          /* Green auto dark theme for markdown-to-rich-text mode */
+          html[data-mode="md2rich"]:not([data-theme]), html[data-mode="md2rich"][data-theme="auto"] {
+            --primary-color: #10b981;
+            --primary-hover: #059669;
+            --secondary-color: #64748b;
+            --secondary-hover: #94a3b8;
+            --tertiary-color: #ef4444;
+            --tertiary-hover: #dc2626;
+            --success-color: #34d399;
+            --error-color: #ef4444;
+            --background: #0f172a;
+            --surface: #1a2e1a;
+            --border: #2d5a2d;
             --text-primary: #f1f5f9;
             --text-secondary: #cbd5e1;
             --text-muted: #64748b;
@@ -149,7 +209,7 @@
 
         .header-content {
           display: flex;
-          justify-content: space-between;
+          justify-content: center;
           align-items: center;
           gap: 20px;
         }
@@ -171,12 +231,51 @@
           font-weight: 400;
         }
 
-        .theme-toggle {
-          background: none;
+
+
+        /* Mode toggle positioning - top left corner */
+        .mode-toggle {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          background: rgba(255, 255, 255, 0.9);
           border: none;
           cursor: pointer;
-          font-size: 18px;
-          padding: 8px;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(10px);
+        }
+
+        .mode-toggle:hover {
+          background: rgba(255, 255, 255, 1);
+          transform: scale(1.1);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .mode-toggle:active {
+          transform: scale(0.95);
+        }
+
+        .mode-icon {
+          color: #374151;
+          font-size: 16px;
+        }
+
+        /* Theme toggle positioning - top right corner */
+        .theme-toggle {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: rgba(255, 255, 255, 0.9);
+          border: none;
+          cursor: pointer;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(10px);
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
@@ -184,7 +283,9 @@
         }
 
         .theme-toggle:hover {
+          background: rgba(255, 255, 255, 1);
           transform: scale(1.1);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .theme-toggle:active {
@@ -192,32 +293,9 @@
         }
 
         .theme-icon {
-          font-size: 18px;
+          color: #374151;
+          font-size: 16px;
           line-height: 1;
-        }
-
-        /* Theme toggle button */
-        .theme-toggle {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          background: none;
-          border: none;
-          cursor: pointer;
-          font-size: 18px;
-          padding: 8px;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.1);
-        }
-
-        .theme-toggle:focus {
-          outline: none;
         }
 
 
@@ -366,6 +444,103 @@
           box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
         }
 
+        /* Rich text preview */
+        .rich-text-preview {
+          flex: 1;
+          min-height: 300px;
+          padding: 16px;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          background-color: var(--background);
+          color: var(--text-primary);
+          overflow-y: auto;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          line-height: 1.6;
+        }
+
+        .rich-text-preview h1, .rich-text-preview h2, .rich-text-preview h3,
+        .rich-text-preview h4, .rich-text-preview h5, .rich-text-preview h6 {
+          margin-top: 1.5em;
+          margin-bottom: 0.5em;
+          font-weight: 600;
+          line-height: 1.25;
+        }
+
+        .rich-text-preview h1 { font-size: 2em; }
+        .rich-text-preview h2 { font-size: 1.5em; }
+        .rich-text-preview h3 { font-size: 1.25em; }
+        .rich-text-preview h4 { font-size: 1.1em; }
+        .rich-text-preview h5 { font-size: 1em; }
+        .rich-text-preview h6 { font-size: 0.9em; }
+
+        .rich-text-preview p {
+          margin-bottom: 1em;
+        }
+
+        .rich-text-preview ul, .rich-text-preview ol {
+          margin-bottom: 1em;
+          padding-left: 2em;
+        }
+
+        .rich-text-preview li {
+          margin-bottom: 0.25em;
+        }
+
+        .rich-text-preview blockquote {
+          margin: 1em 0;
+          padding-left: 1em;
+          border-left: 4px solid var(--border);
+          color: var(--text-secondary);
+          font-style: italic;
+        }
+
+        .rich-text-preview code {
+          background-color: var(--surface);
+          padding: 0.2em 0.4em;
+          border-radius: 3px;
+          font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+          font-size: 0.9em;
+        }
+
+        .rich-text-preview pre {
+          background-color: var(--surface);
+          padding: 1em;
+          border-radius: 6px;
+          overflow-x: auto;
+          margin: 1em 0;
+        }
+
+        .rich-text-preview pre code {
+          background: none;
+          padding: 0;
+        }
+
+        .rich-text-preview a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        .rich-text-preview a:hover {
+          text-decoration: underline;
+        }
+
+        .rich-text-preview table {
+          border-collapse: collapse;
+          width: 100%;
+          margin: 1em 0;
+        }
+
+        .rich-text-preview th, .rich-text-preview td {
+          border: 1px solid var(--border);
+          padding: 0.5em;
+          text-align: left;
+        }
+
+        .rich-text-preview th {
+          background-color: var(--surface);
+          font-weight: 600;
+        }
+
         .output-info {
           display: flex;
           justify-content: space-between;
@@ -459,29 +634,7 @@
           color: var(--primary-color);
         }
 
-        /* Theme toggle button */
-        .theme-toggle {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          background: none;
-          border: none;
-          cursor: pointer;
-          font-size: 18px;
-          padding: 8px;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
 
-        .theme-toggle:hover {
-          transform: scale(1.1);
-        }
-
-        .theme-toggle:active {
-          transform: scale(0.95);
-        }
 
         /* Adjust header to accommodate theme toggle */
         .header {
@@ -512,15 +665,26 @@
             gap: 16px;
           }
 
-          .title-section {
-            order: 1;
+          .theme-toggle {
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
           }
 
-          .theme-toggle {
-            order: 0;
-            align-self: flex-end;
-            font-size: 16px;
-            padding: 6px;
+          .theme-icon {
+            font-size: 14px;
+          }
+
+          .mode-toggle {
+            top: 15px;
+            left: 15px;
+            width: 36px;
+            height: 36px;
+          }
+
+          .mode-icon {
+            font-size: 14px;
           }
           
           .header h1 {
@@ -570,21 +734,24 @@
 <body>
     <div class="container">
         <header class="header">
+            <button id="modeToggle" class="mode-toggle" title="Toggle conversion mode">
+                <span class="mode-icon">♻️</span>
+            </button>
+            <button id="themeToggle" class="theme-toggle" title="Toggle theme (auto/light/dark)">
+                <span class="theme-icon" data-theme="auto">🌓</span>
+            </button>
             <div class="header-content">
                 <div class="title-section">
-                    <h1>Paste to Markdown</h1>
-                    <p class="subtitle">Convert rich text to Markdown format instantly</p>
+                    <h1 id="mainTitle">Paste to Markdown</h1>
+                    <p id="subtitle" class="subtitle">Convert rich text to Markdown format instantly</p>
                 </div>
-                <button id="themeToggle" class="theme-toggle" title="Toggle theme (auto/light/dark)">
-                    <span class="theme-icon" data-theme="auto">🌓</span>
-                </button>
             </div>
         </header>
         
         <main class="main-content">
             <div id="instructions" class="instructions">
                 <h2>How to Use</h2>
-                <ol>
+                <ol id="instructionsList">
                     <li>Copy rich text from any source (websites, documents, emails, etc.)</li>
                     <li>Click "Paste & Convert" below or press <code>Ctrl+V</code> / <code>⌘+V</code></li>
                     <li>The converted Markdown will appear in the text area</li>
@@ -597,10 +764,10 @@
             
             <div class="actions">
                 <button id="pasteBtn" class="btn btn-primary">
-                    📋 Paste & Convert
+                    <span id="pasteBtnText">📋 Paste & Convert</span>
                 </button>
                 <button id="copyBtn" class="btn btn-secondary" disabled>
-                    📄 Copy Markdown
+                    <span id="copyBtnText">📄 Copy Markdown</span>
                 </button>
                 <button id="clearBtn" class="btn btn-tertiary" disabled>
                     🗑️ Clear
@@ -608,8 +775,9 @@
             </div>
             
             <div id="output-section" class="output-section hidden">
-                <h3>Converted Markdown:</h3>
-                <textarea id="output" placeholder="Converted Markdown will appear here..."></textarea>
+                <h3 id="outputTitle">Converted Markdown:</h3>
+                <textarea id="output" placeholder="Converted content will appear here..."></textarea>
+                <div id="richTextPreview" class="rich-text-preview hidden"></div>
                 <div class="output-info">
                     <span id="char-count">0 characters</span>
                     <span id="status" class="status"></span>
@@ -624,7 +792,7 @@
         </main>
         
         <footer class="footer">
-            <p class="footer-text">
+            <p class="footer-text" id="footerText">
                 Powered by <a href="https://github.com/domchristie/to-markdown" target="_blank" rel="noopener">to-markdown</a>
                 • Based on <a href="https://github.com/euangoddard/clipboard2markdown" target="_blank" rel="noopener">clipboard2markdown</a>
             </p>
@@ -638,6 +806,7 @@
     </div>
     
     <script src="lib/to-markdown.js"></script>
+    <script src="lib/marked.min.js"></script>
     <script src="web-app.js"></script>
 
     <script>
